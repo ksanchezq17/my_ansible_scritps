@@ -1,0 +1,19 @@
+- name: terminate instances that are tagged with certain  mck-number
+  hosts: localhost
+  gather_facts: no
+  vars:
+    instance_tags:
+      "Project Code": "{{ mck_number }}"
+  tasks:
+    - name: terminate  instances that are tagged with certain mck-number
+      local_action:
+        module: ec2
+        region: "{{ item }}"
+        instance_tags: '{{ instance_tags }}'
+        state: absent
+        wait: True
+      with_items:
+         - us-east-1
+         - eu-central-1
+         - eu-west-1
+         - ap-south-1
