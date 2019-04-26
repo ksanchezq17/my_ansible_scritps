@@ -6,8 +6,8 @@
   vars:
     aws_region: "us-east-1"
     ec2_tags:
-      Project Code: "mck-123456789"
-     # Type: "API"
+      Project Code: "{{ mck_numbe }}"
+     
 
   tasks:
     - name: Find EC2 Facts
@@ -17,9 +17,6 @@
         filters:
           "tag:Project Code": "mck-123456789"
       register: ec2_facts
-
-      # (-) is used to stip white spaces
-      # http://jinja.pocoo.org/docs/dev/templates/#whitespace-control
 
     - debug:
         msg: "{{ ec2_facts.instances }}"
