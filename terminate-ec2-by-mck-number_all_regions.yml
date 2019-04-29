@@ -1,0 +1,30 @@
+- name: Find EC2 instances
+  hosts: localhost
+  connection: local
+  gather_facts: no
+
+  tasks:
+    - name: Find EC2 Facts
+      local_action:
+        module: ec2_instance_facts
+        region: "{{ item }}"
+        filters:
+          "tag:Project Code": "{{ mck_number }}"
+      with_items:
+         - us-east-1
+         - eu-central-1
+         - eu-west-1
+         - ap-south-1
+      register: ec2_facts
+
+    - debug:
+        msg: "{{ ec2_facts.results[0].instances }}"
+
+    - name: Terminate EC2 instances
+      local_action:
+         module: ec2
+         region: "{{ aws_region }}"
+         instance_ids: "{{ item.instance_id }}"
+         state: "absent"
+         wait: True
+      with_items: "{{ ec2_facts.results[0].instances }}"
