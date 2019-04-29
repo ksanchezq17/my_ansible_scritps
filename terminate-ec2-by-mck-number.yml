@@ -4,9 +4,9 @@
   gather_facts: no
 
   vars:
-    aws_region: "us-east-1"
-    ec2_tags:
-      Project Code: "{{ mck_numbe }}"
+    aws_region: "{{ region }}"
+    #ec2_tags:
+    #  Project Code: "{{ mck_number }}"
      
 
   tasks:
@@ -15,7 +15,7 @@
         module: ec2_instance_facts
         region: "{{ aws_region }}"
         filters:
-          "tag:Project Code": "mck-123456789"
+          "tag:Project Code": "{{ mck_number }}"
       register: ec2_facts
 
     - debug:
