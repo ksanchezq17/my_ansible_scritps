@@ -10,6 +10,7 @@
         region: "{{ item }}"
         filters:
           "tag:Project Code": "{{ mck_number }}"
+          instance-state-name: stopped
       with_items:
          - us-east-1
          - eu-central-1
@@ -18,12 +19,12 @@
       register: ec2_facts
 
     - debug:
-        msg: "{{ ec2_facts.results[0].instances }}"
+        msg: "{{ ec2_facts.results[0].instances[0].placement.availability_zone[:-1] }}"
 
-    - name: Terminate EC2 instances
+    - name: Terminate EC2 server
       local_action:
          module: ec2
-         region: "{{ aws_region }}"
+         region: "{{ ec2_facts.results[0].instances[0].placement.availability_zone[:-1]  }}"
          instance_ids: "{{ item.instance_id }}"
          state: "absent"
          wait: True
