@@ -1,0 +1,6 @@
+- name: Obtain the region where instances with certain mck-number are located
+  shell: aws s3api get-bucket-location --bucket "mck-{{ mck_num }}-data" | awk '{print $2}'
+  register: regionname
+
+- debug: var=regionname
+- debug: var=regionname.stdout
