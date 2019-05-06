@@ -12,6 +12,7 @@
         region: "{{ regionname.stdout | replace('\"', '')| replace('\n', '') | replace('null', 'us-east-1') }}"
         filters:
           "tag:Project Code": "mck-{{ mck_number }}"
+          instance-state-name: stopped
       register: ec2_facts
 
     - debug:
